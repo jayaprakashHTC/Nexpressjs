@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/user', (req, res) =>{
-    console.log("This is router folder inside user route file. Say Hi!!");
-    res.status(201).send("This is router folder inside user route file. Say Hi!!");
-});
+//Controller file start here
+const userControllerDetails = require('../controller/user.controller')
+//Controller file end here
+
+
+router.get('/user', userControllerDetails.getAllUsers);
 
 
 module.exports = router;
