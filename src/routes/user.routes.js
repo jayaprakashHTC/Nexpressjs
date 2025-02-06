@@ -7,6 +7,8 @@ const userControllerDetails = require('../controller/user.controller')
 
 
 router.get('/user', userControllerDetails.getAllUsers);
+router.post('/user', userControllerDetails.postUsers);
+router.put('/user/:id', userControllerDetails.putUsers);
 
 
 module.exports = router;
