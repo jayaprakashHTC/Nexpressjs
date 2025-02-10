@@ -7,8 +7,9 @@ const userControllerDetails = require('../controller/user.controller')
 
 
 router.get('/user', userControllerDetails.getAllUsers);
+router.get('/users', userControllerDetails.getFilterUsers);
 router.post('/user', userControllerDetails.postUsers);
 router.put('/user/:id', userControllerDetails.putUsers);
-
+router.delete('/user/:id', userControllerDetails.deleteUsers);
 
 module.exports = router;
