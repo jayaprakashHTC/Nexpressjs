@@ -13,6 +13,8 @@ const connectMongodb = require("../models/user.model"); // Import DB connection 
 
 const dbCollection = "UserDetails";
 
+
+
 const dbConnection = async() =>{
     const db = await connectMongodb(); // Get database instance
     const users = await db.collection(dbCollection).find().toArray(); // Fetch users
@@ -65,7 +67,7 @@ exports.postUsers = async(req, res) =>{
         const body = req.body;
         console.log(body);
         const db = await connectMongodb();
-        const result = await db.collection(dbCollection).insertMany(body); // Insert data
+        const result = await db.collection(dbCollection).insertMany([body]); // Insert data
         res.status(201).json({ message: "User added successfully", result});
     } catch (error) {
         res.status(400)

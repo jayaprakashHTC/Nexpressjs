@@ -5,8 +5,10 @@ const router = express.Router();
 const userControllerDetails = require('../controller/importfiles.controller')
 //Controller file end here
 
-router.get('/data', userControllerDetails.getImportJsonData);
-router.post('/data', userControllerDetails.importfilesTodb);
+const {getImportJsonData, importfilesTodb} = userControllerDetails;
+
+router.get('/data', getImportJsonData);
+router.post('/data', importfilesTodb);
 
 
 module.exports = router;
