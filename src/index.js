@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 app.use(express.json());
 
-
+const SESSION_SECRET = require('./config/keys.js');
 
 // const dbuser = "users";
 // const dbCollection = "register";
@@ -37,7 +37,7 @@ const sessionStore = MongoStore.create({
 });
 
 app.use(session({
-    secret: process.env.SESSION_SECRET || "my-secret-key", // Use the secret from .env
+    secret: process.env.SESSION_SECRET || SESSION_SECRET, // Use the secret from .env
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
@@ -54,6 +54,7 @@ app.use(session({
 const userRoutes = require('./routes/user.routes.js');
 const importFiles = require('./routes/importfiles.routes.js');
 const regsiter = require('./routes/register.routes.js');
+
 //routes files end here
 
 // const dbConnection = async() =>{
@@ -64,6 +65,9 @@ const regsiter = require('./routes/register.routes.js');
 
 
 //app.use(userRoutes);
+// app.use(secretkey, (req, res, next)=>{
+//     next();
+// });
 app.use('/api', userRoutes);
 app.use('/user', regsiter);
 app.use('/file', importFiles);
