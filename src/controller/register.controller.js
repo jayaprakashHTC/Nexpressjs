@@ -2,7 +2,9 @@ require('dotenv').config();
 
 const express = require('express');
 
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
+
+const crypto = require('crypto');
 
 const bodyParser = require('body-parser');
 
@@ -38,15 +40,30 @@ exports.postRegsiter = async(req, res) =>{
     try {
         const {  body:{username, email, contact, password, confirmPassword, address}} = req;
         // Hash the password
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const hashedConfirmPassword = await bcrypt.hash(confirmPassword, saltRounds);
+        // const saltRounds = 10;
+        // const hashedPassword = await bcrypt.hash(password, saltRounds);
+        // const hashedConfirmPassword = await bcrypt.hash(confirmPassword, saltRounds);
+
+        const salt = crypto.randomBytes(16); // Random salt
+        const iterations = 100000; // Number of iterations
+        const keylen = 64; // Desired key length
+        const digest = 'sha512'; // Hash function
+
+       const cryptoPassword =  crypto.pbkdf2Sync(password, salt, iterations, keylen, digest);
+
+       console.log("cryptoPassword", cryptoPassword);
+      
+       const cryptoConfirmPassword =  crypto.pbkdf2Sync(confirmPassword, salt, iterations, keylen, digest);
+
+       console.log("cryptoConfirmPassword", cryptoConfirmPassword);
+
+
         const bodyResults = {
             username:username,
             email:email,
             contact:contact,
-            password:hashedPassword,
-            confirmPassword:hashedConfirmPassword,
+            password:cryptoPassword.toString('hex'),
+            confirmPassword:cryptoConfirmPassword.toString('hex'),
             address:address
         }
         console.log("email body", password);
@@ -67,20 +84,39 @@ exports.loginUser = async (req, res) =>{
 
     console.log(`username - ${username} and password - ${password}`);
 
+    const salt = crypto.randomBytes(16); // Random salt
+    const iterations = 100000; // Number of iterations
+    const keylen = 64; // Desired key length
+    const digest = 'sha512'; // Hash function
+
     try {
         const users = await dbConnection();
 
         // console.log("users", users);
 
         const findUser = users.find((user) => user.username === username);
+        console.log("findUser", findUser);
+
 
         if (!findUser) {
             return res.status(404).json({ message: "User not found" });
         }
 
-        const pwd = await bcrypt.compare(password, findUser.password);
+        // const pwd = await crypto.compare(password, findUser.password);
 
-        if (findUser.username === username && pwd === true) {
+        const saltdata = crypto.randomBytes(16).toString('hex');
+        const hashPassword = (password, salt) => crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
+
+        const hash = hashPassword(password, saltdata);   
+        
+        const comparePassword = (inputPassword, storedHash, salt) =>{
+            const hashpwd  = hashPassword(inputPassword, salt);
+            return hashpwd === storedHash;
+        };
+        
+        const isMatch = comparePassword(password, hash, saltdata);
+
+        if (findUser.username === username && isMatch === true ) {
             // res.cookie('myCookie', findUser.username, {
             //     maxAge: 60000, // Cookie expires in 1 minute
             //     httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
