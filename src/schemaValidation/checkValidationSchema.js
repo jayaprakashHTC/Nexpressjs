@@ -143,7 +143,164 @@ const checkRegisterSchemaValidation = checkSchema({
   },
 });
 
+const jwtAccessRegsiterValidations = checkSchema({
+  stu_id:{
+    isLength: {
+      options: { min: 10, max: 10 },
+      errorMessage: 'Contact number must be exactly 10 digits',
+    },
+    notEmpty: {
+      errorMessage: 'Contact number is required',
+    }
+  },
+  stu_fname:{
+    isLength: {
+      options: { min: 3 },
+      errorMessage: 'Name must be at least 3 characters long',
+    },
+    notEmpty:{
+      errorMessage: 'User first name is required',
+    },
+    trim:true,
+    escape:true,
+  },
+  stu_lname:{
+    isLength: {
+      options: { min: 3 },
+      errorMessage: 'Name must be at least 3 characters long',
+    },
+    notEmpty:{
+      errorMessage: 'User last name is required',
+    },
+    trim:true,
+    escape:true,
+  },
+  stu_father_fname:{
+    isLength: {
+      options: { min: 3 },
+      errorMessage: 'Name must be at least 3 characters long',
+    },
+    notEmpty:{
+      errorMessage: 'User first name is required',
+    },
+    trim:true,
+    escape:true,
+  },
+  stu_father_lname:{
+    isLength: {
+      options: { min: 3 },
+      errorMessage: 'Name must be at least 3 characters long',
+    },
+    notEmpty:{
+      errorMessage: 'User last name is required',
+    },
+    trim:true,
+    escape:true,
+  },
+  stu_email:{
+    notEmpty: {
+      errorMessage: 'Email is required',
+    },
+    isEmail: {
+      errorMessage: 'Must be a valid email',
+    },
+    normalizeEmail: true,
+  },
+  stu_phone:{
+    isLength: {
+      options: { min: 10, max: 10 },
+      errorMessage: 'Contact number must be exactly 10 digits',
+    },
+    isNumeric: {
+      errorMessage: 'Contact number must contain only numbers',
+    },
+    notEmpty: {
+      errorMessage: 'Contact number is required',
+    },
+    isMobilePhone: {
+      options: ['en-US'], // Validate for USA phone numbers
+      errorMessage: 'Must be a valid USA phone number',
+    },
+    custom: {
+      options: (value) => {
+        // Custom validation for a 10-digit phone number
+        if (!/^\d{10}$/.test(value)) {
+          throw new Error('Contact number must be exactly 10 digits');
+        }
+        return true;
+      },
+    }
+  },
+  stu_db:{
+    notEmpty: {
+      errorMessage: 'Your Date Birth is required',
+    },
+    // matches: {
+    //   options: /\d{1,2}\/\d{1,2}\/\d{2,4}/, // At least one uppercase letter and one number
+    // },
+  },
+  // stu_clg_name:{
+  //   notEmpty: {
+  //     errorMessage: 'College name is required',
+  //   }
+  // },
+  stu_passout:{
+    notEmpty: {
+      errorMessage: 'Your Date Birth is required',
+    },
+    // isDate:{
+
+    // },
+    // matches: {
+    //   options: /\d{1,2}\/\d{1,2}\/\d{2,4}/, // At least one uppercase letter and one number
+    // },
+  },
+  stu_marks:{
+    isNumeric: {
+      errorMessage: 'Marks must contain only numbers',
+    },
+    notEmpty: {
+      errorMessage: 'You are marks is required',
+    }
+  },
+  stu_status:{
+    notEmpty:{
+      errorMessage: 'User status is required',
+    },
+  },
+  stu_pwd:{
+    notEmpty: {
+      errorMessage: 'Password is required',
+    },
+    isLength: {
+      options: { min: 6 },
+      errorMessage: 'Password must be at least 6 characters long',
+    },
+    matches: {
+      options: /^(?=.*[A-Z])(?=.*\d).+$/, // At least one uppercase letter and one number
+      errorMessage:
+        'Password must contain at least one uppercase letter and one number',
+    },
+  },
+  stu_cpwd:{
+    notEmpty: {
+      errorMessage: 'Confirm Password is required',
+    },
+    custom: {
+      options: (value, { req }) => {
+        if (value !== req.body.stu_pwd) {
+          throw new Error('Passwords do not match');
+        }
+        return true;
+      },
+    },
+  }
+  
+
+});
+
 module.exports = {
   checkRegisterSchemaValidation, 
-  checkSchemaValidation
+  checkSchemaValidation,
+  jwtAccessRegsiterValidations
 };

@@ -54,6 +54,7 @@ app.use(session({
 const userRoutes = require('./routes/user.routes.js');
 const importFiles = require('./routes/importfiles.routes.js');
 const regsiter = require('./routes/register.routes.js');
+const jwtaccess = require('./routes/jwtaccess.routes.js');
 
 //routes files end here
 
@@ -71,6 +72,7 @@ const regsiter = require('./routes/register.routes.js');
 app.use('/api', userRoutes);
 app.use('/user', regsiter);
 app.use('/file', importFiles);
+app.use('/jwt', jwtaccess);
 //app.use(middlewareTest);
 
 
