@@ -84,10 +84,10 @@ exports.loginUser = async (req, res) =>{
 
     console.log(`username - ${username} and password - ${password}`);
 
-    const salt = crypto.randomBytes(16); // Random salt
-    const iterations = 100000; // Number of iterations
-    const keylen = 64; // Desired key length
-    const digest = 'sha512'; // Hash function
+    // const salt = crypto.randomBytes(16); // Random salt
+    // const iterations = 100000; // Number of iterations
+    // const keylen = 64; // Desired key length
+    // const digest = 'sha512'; // Hash function
 
     try {
         const users = await dbConnection();
