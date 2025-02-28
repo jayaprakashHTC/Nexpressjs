@@ -299,6 +299,11 @@ const jwtAccessRegsiterValidations = checkSchema({
 
 });
 
+
+// const checkPassportjsRegsiterValidation = checkSchema({
+
+// })
+
 module.exports = {
   checkRegisterSchemaValidation, 
   checkSchemaValidation,
