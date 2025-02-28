@@ -10,6 +10,8 @@ const session = require('express-session');
 
 const cookieParser = require('cookie-parser');
 
+const passport = require('passport');
+
 const MongoStore = require('connect-mongo');
 
 // const { MongoClient, ObjectId } = require('mongodb');
@@ -21,6 +23,8 @@ app.use(cookieParser());
 
 app.use(express.json());
 
+
+
 const SESSION_SECRET = require('./config/keys.js');
 
 // const dbuser = "users";
@@ -30,7 +34,7 @@ const SESSION_SECRET = require('./config/keys.js');
 const sessionStore = MongoStore.create({
     mongoUrl: process.env.MONGO_URI,  // MongoDB connection URI
     dbName:'users',
-    collectionName: 'register',       // (Optional) Collection name
+    collectionName: 'sesssionDB',       // (Optional) Collection name
     ttl: 14 * 24 * 60 * 60,           // Time-to-live (14 days)
     autoRemove: 'native',             // Automatically remove expired sessions
     touchAfter: 24 * 3600,            // Update session only if modified after 24 hours
@@ -49,12 +53,17 @@ app.use(session({
     }    
 }))
 
+app.use(passport.initialize());
+
+app.use(passport.session());
 
 //routes files start here
 const userRoutes = require('./routes/user.routes.js');
 const importFiles = require('./routes/importfiles.routes.js');
 const regsiter = require('./routes/register.routes.js');
 const jwtaccess = require('./routes/jwtaccess.routes.js');
+const passportjsLocalstrategy = require('./routes/passportjs/localstrategy.routes.js');
+const passportjsJWTstrategy = require('../src/routes/passportjs/jwtstrategy.routes.js');
 
 //routes files end here
 
@@ -73,6 +82,8 @@ app.use('/api', userRoutes);
 app.use('/user', regsiter);
 app.use('/file', importFiles);
 app.use('/jwt', jwtaccess);
+app.use('/passportjs', passportjsLocalstrategy);
+app.use('/passportjsjwt', passportjsJWTstrategy);
 //app.use(middlewareTest);
 
 
