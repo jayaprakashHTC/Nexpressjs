@@ -6,6 +6,10 @@ const app = express();
 
 // const bcrypt = require('bcrypt');
 
+const helmet = require('helmet');
+
+const cors = require('cors');
+
 const session = require('express-session');
 
 const cookieParser = require('cookie-parser');
@@ -14,10 +18,20 @@ const passport = require('passport');
 
 const MongoStore = require('connect-mongo');
 
+const path = require('path');
+
+// const ejs = require('ejs');
+
+
+
 // const { MongoClient, ObjectId } = require('mongodb');
 
 // app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 // const connectMongodb = require("./models/user.model.js"); // Import DB connection function
+
+app.use(helmet());
+
+app.use(cors());
 
 app.use(cookieParser());
 
@@ -29,6 +43,11 @@ const SESSION_SECRET = require('./config/keys.js');
 
 // const dbuser = "users";
 // const dbCollection = "register";
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+
 
 // console.log("uri", uri);
 const sessionStore = MongoStore.create({
@@ -64,6 +83,7 @@ const regsiter = require('./routes/register.routes.js');
 const jwtaccess = require('./routes/jwtaccess.routes.js');
 const passportjsLocalstrategy = require('./routes/passportjs/localstrategy.routes.js');
 const passportjsJWTstrategy = require('../src/routes/passportjs/jwtstrategy.routes.js');
+const passportjsOauthstrategy = require('../src/routes/passportjs/oauthstrategy.routes.js');
 
 //routes files end here
 
@@ -84,7 +104,10 @@ app.use('/file', importFiles);
 app.use('/jwt', jwtaccess);
 app.use('/passportjs', passportjsLocalstrategy);
 app.use('/passportjsjwt', passportjsJWTstrategy);
+app.use('/passportjsOauth', passportjsOauthstrategy);
 //app.use(middlewareTest);
+
+
 
 
 

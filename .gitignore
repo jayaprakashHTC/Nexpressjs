@@ -3,6 +3,8 @@ node_modules/
 
 # Environment variables (Secrets, DB credentials, API keys)
 .env
+.env.*
+!.env.example  # Keep an example file for reference
 
 # Logs
 logs/
@@ -14,20 +16,27 @@ yarn-error.log*
 # Cache and temp files
 .cache/
 .tmp/
+.temp/
 
 # OS-specific files
 .DS_Store  # macOS
 Thumbs.db  # Windows
+desktop.ini
 
 # IDE and Editor settings
 .vscode/
 .idea/
 *.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
 
 # Build and distribution files
 dist/
 build/
 coverage/
+out/
+.next/  # For Next.js projects
 
 # MongoDB data & dumps (if using local MongoDB)
 dump/
@@ -41,7 +50,19 @@ mongod.lock
 # Docker and Kubernetes (if applicable)
 docker-compose.override.yml
 .kube/
+.env.local  # Local environment overrides
 
 # Dependency Lock files (optional, unless tracking lock files)
 package-lock.json
 yarn.lock
+
+# Testing frameworks (optional, if using specific frameworks)
+.nyc_output/
+.jest/
+
+# Misc
+*.bak
+*.tmp
+*.pid
+*.seed
+*.pid.lock
